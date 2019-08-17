@@ -1,0 +1,9 @@
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="@string/print_title">
+        <EditTextPreference
+            app:key="host"
+            app:title="@string/host_title"
+            app:defaultValue="192.168.1.2"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

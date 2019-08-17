@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Servicio de impresión de Xerox</string>
+    <string name="title_activity_main">Xerox WorkCentre 7425</string>
+    <string name="title_activity_settings">Configuración</string>
+    <string name="print_title">Impresora</string>
+    <string name="host_title">IP o dominio</string>
+</resources>
