@@ -52,7 +52,7 @@ public class XeroxPrinterDiscoverySession extends PrinterDiscoverySession {
                                 .build();
 
                         Request request = new Request.Builder()
-                                .url("http://"+host+"/print.html")
+                                .url("http://"+host+"/print.htm")
                                 .get()
                                 .build();
 

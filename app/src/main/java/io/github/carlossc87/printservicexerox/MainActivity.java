@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         String host = prefs.getString("host","192.168.1.2");
-        tvUrl.setText("http://"+host+"/print.html");
+        tvUrl.setText("http://"+host+"/print.htm");
     }
 
     @Override
