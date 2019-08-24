@@ -12,6 +12,9 @@ import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
+import com.stealthcopter.networktools.ARPInfo;
+import com.stealthcopter.networktools.WakeOnLan;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -48,6 +51,11 @@ public class XeroxPrinterDiscoverySession extends PrinterDiscoverySession {
                 @Override
                 protected Boolean doInBackground(Void... params) {
                     try {
+                        // WakeOnLan - Despertamos la impresora
+                        String mac = ARPInfo.getMACFromIPAddress(host);
+                        WakeOnLan.sendWakeOnLan(host, mac);
+
+                        // Comrpobamos si está disponible
                         final OkHttpClient client = new OkHttpClient.Builder()
                                 .build();
 
