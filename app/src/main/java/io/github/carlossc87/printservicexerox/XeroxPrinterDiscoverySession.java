@@ -13,8 +13,12 @@ import android.util.Log;
 import androidx.preference.PreferenceManager;
 
 import com.stealthcopter.networktools.ARPInfo;
+import com.stealthcopter.networktools.IPTools;
 import com.stealthcopter.networktools.WakeOnLan;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -52,8 +56,18 @@ public class XeroxPrinterDiscoverySession extends PrinterDiscoverySession {
                 protected Boolean doInBackground(Void... params) {
                     try {
                         // WakeOnLan - Despertamos la impresora
-                        String mac = ARPInfo.getMACFromIPAddress(host);
-                        WakeOnLan.sendWakeOnLan(host, mac);
+                        try{
+                            String ip = host;
+                            if(!IPTools.isIPv4Address(ip)){
+                                ip = InetAddress.getByName(host).getHostAddress();
+                            }
+                            String mac = ARPInfo.getMACFromIPAddress(ip);
+                            if( mac != null ){
+                                WakeOnLan.sendWakeOnLan(ip, mac);
+                            }
+                        }catch(IllegalArgumentException | IOException e){
+                            Log.w(LOG_TAG, "No se ha podido derpertar la impresora, pero se intenta imprimir por si está despierta.", e);
+                        }
 
                         // Comrpobamos si está disponible
                         final OkHttpClient client = new OkHttpClient.Builder()
@@ -90,7 +104,17 @@ public class XeroxPrinterDiscoverySession extends PrinterDiscoverySession {
 
         final PrinterCapabilitiesInfo capabilities =
                 new PrinterCapabilitiesInfo.Builder(printerId)
+                        .addMediaSize(PrintAttributes.MediaSize.ISO_A3, false)
                         .addMediaSize(PrintAttributes.MediaSize.ISO_A4, true)
+                        .addMediaSize(PrintAttributes.MediaSize.ISO_A5, false)
+                        .addMediaSize(PrintAttributes.MediaSize.ISO_B4, false)
+                        .addMediaSize(PrintAttributes.MediaSize.ISO_B5, false)
+                        .addMediaSize(PrintAttributes.MediaSize.NA_LETTER, false)
+                        .addMediaSize(PrintAttributes.MediaSize.NA_LEGAL, false)
+                        .addMediaSize(PrintAttributes.MediaSize.NA_FOOLSCAP, false)
+                        .addMediaSize(PrintAttributes.MediaSize.NA_TABLOID, false)
+                        .addMediaSize(PrintAttributes.MediaSize.UNKNOWN_PORTRAIT, false)
+                        .addMediaSize(PrintAttributes.MediaSize.UNKNOWN_LANDSCAPE, false)
                         .addResolution(new PrintAttributes.Resolution("1","Normal",
                                 600,600), true)
                         .setColorModes(PrintAttributes.COLOR_MODE_COLOR |
